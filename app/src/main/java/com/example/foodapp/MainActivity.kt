@@ -1,5 +1,6 @@
 package com.example.foodapp
 
+import AddScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -38,6 +39,10 @@ fun FoodAppNavHost() {
                 CategoryDetailScreen(categoryName, navController)
             }
         }
+        composable("add_screen") {
+            AddScreen(navController = navController)
+        }
+
     }
 }
 

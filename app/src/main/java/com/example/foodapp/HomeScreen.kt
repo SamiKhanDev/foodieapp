@@ -4,10 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,9 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -43,16 +37,15 @@ fun HomeScreen (navController: NavHostController){
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // Title "Foodie"
+
         item {
             Text(
                 text = "Foodie",
                 style = MaterialTheme.typography.headlineLarge,
-                modifier = Modifier.padding(16.dp)
             )
         }
 
-        // Featured Image
+
         item {
             Image(
                 painter = painterResource(id = R.drawable.image_0),
@@ -60,13 +53,11 @@ fun HomeScreen (navController: NavHostController){
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp)
-                    .padding(vertical = 16.dp)
                     .clip(RoundedCornerShape(8.dp)),
                 contentScale = ContentScale.Crop
             )
         }
 
-        // Cuisines Section
         item {
             Text(
                 text = "Cuisines",
@@ -75,24 +66,21 @@ fun HomeScreen (navController: NavHostController){
             )
         }
 
-        // CuisineRow inside LazyColumn
         item {
             CuisineRow()
         }
 
-        // Categories Section Title
         item {
             Text(
                 text = "Categories",
                 style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 8.dp)
+                modifier = Modifier.padding( top = 16.dp)
             )
         }
 
-        // CategoriesGridScreen Trigger (Navigate to category list)
         item {
             CategoriesGridScreen { category ->
-                navController.navigate("categoryDetail/Italian")  // Pass the correct category name
+                navController.navigate("categoryDetail/Italian")
             }
         }
     }
@@ -105,11 +93,11 @@ data class CategoryItem( val imageRes: Int)
 fun CuisineRow() {
     val cuisines = remember {
         listOf(
-            CuisineItem("Italian", R.drawable.image_1),
-            CuisineItem("Mexican", R.drawable.image_0),
-            CuisineItem("Chinese", R.drawable.image_1),
-            CuisineItem("Indian", R.drawable.image_0),
-            CuisineItem("Japanese", R.drawable.image_1)
+            CuisineItem("Italian", R.drawable.italian),
+            CuisineItem("Mexican", R.drawable.mexican),
+            CuisineItem("Chinese", R.drawable.chinese),
+            CuisineItem("Indian", R.drawable.indianfood),
+            CuisineItem("Japanese", R.drawable.japenese)
         )
     }
 
@@ -213,7 +201,7 @@ fun CategoryCard(category: CategoryItem, onCategoryClick: (CategoryItem) -> Unit
             painter = painterResource(id = category.imageRes),
             contentDescription = null,
             modifier = Modifier
-                .size(110.dp)
+                .size(100.dp)
                 .clip(RoundedCornerShape(8.dp)),
             contentScale = ContentScale.Crop
         )

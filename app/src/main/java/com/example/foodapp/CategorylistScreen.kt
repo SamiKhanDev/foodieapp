@@ -4,12 +4,16 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -46,6 +50,8 @@ fun CategoryDetailScreen(categoryName: String, navController: NavHostController)
     val pagerState = rememberPagerState(initialPage = 0) { 3 }
     var isBottomSheetVisible by remember { mutableStateOf(false) }
 
+
+
     Column {
         TopAppBar(
             title = {
@@ -73,8 +79,9 @@ fun CategoryDetailScreen(categoryName: String, navController: NavHostController)
 
         if (isBottomSheetVisible) {
             ModalBottomSheet(
+
                 onDismissRequest = { isBottomSheetVisible = false },
-                sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+                sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
             ) {
                 BottomSheetContent(navController = navController)
             }
@@ -84,6 +91,25 @@ fun CategoryDetailScreen(categoryName: String, navController: NavHostController)
 
 @Composable
 fun BottomSheetContent(navController: NavHostController) {
+    val cuisines = remember {
+        listOf(
+            CuisineItem("Italian", R.drawable.italian),
+            CuisineItem("Mexican", R.drawable.mexican),
+            CuisineItem("Chinese", R.drawable.chinese),
+            CuisineItem("Indian", R.drawable.indianfood),
+            CuisineItem("Japanese", R.drawable.japenese),
+            CuisineItem("Italian", R.drawable.italian),
+            CuisineItem("Mexican", R.drawable.mexican),
+            CuisineItem("Chinese", R.drawable.chinese),
+            CuisineItem("Indian", R.drawable.indianfood),
+            CuisineItem("Japanese", R.drawable.japenese),
+            CuisineItem("Italian", R.drawable.italian),
+            CuisineItem("Mexican", R.drawable.mexican),
+            CuisineItem("Chinese", R.drawable.chinese),
+            CuisineItem("Indian", R.drawable.indianfood),
+            CuisineItem("Japanese", R.drawable.japenese)
+        )
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -91,13 +117,15 @@ fun BottomSheetContent(navController: NavHostController) {
     ) {
         Text("Bottom Sheet Title", style = MaterialTheme.typography.headlineSmall)
         Spacer(modifier = Modifier.padding(8.dp))
-        FloatingActionButton(
-            onClick = {
-                navController.navigate("add_screen")
-            },
-            modifier = Modifier.align(Alignment.CenterHorizontally) // Center FAB
+
+
+        LazyColumn (
+            modifier = Modifier.padding(vertical = 4.dp),
+            verticalArrangement = Arrangement.spacedBy(0.dp)
         ) {
-            Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
+            items(cuisines) { cuisine ->
+                CuisineCard(cuisine)
+            }
         }
     }
     }

@@ -6,6 +6,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -20,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
@@ -35,7 +37,9 @@ fun SpinningWheelScreen() {
     var selectedAmount by remember { mutableStateOf("") }
     var showCelebration by remember { mutableStateOf(false) }
 
-    var amounts = remember { List(8) { Random.nextInt(1, 100).toString() } }
+    var amounts = arrayOf("10", "20", "30", "40", "50")
+
+
 
     Scaffold(
         topBar = {
@@ -44,7 +48,22 @@ fun SpinningWheelScreen() {
             )
         },
         content = {
-            Column(
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.game), // Your background image
+                    contentDescription = "Background Image",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.65f)
+                        .align(Alignment.TopCenter), // Align it to the top half of the screen
+                    contentScale = ContentScale.Crop // Adjust image scaling
+                )}
+
+
+                Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(it),
@@ -58,11 +77,12 @@ fun SpinningWheelScreen() {
 
 
                     Image(
-                        painter = painterResource(id = R.drawable.arrow_pic),
+                        painter = painterResource(id = R.drawable.logo),
                         contentDescription = "Arrow",
                         modifier = Modifier
-                            .size(40.dp)
+                            .size(80.dp)
                             .align(Alignment.Center)
+                            .clip(RoundedCornerShape(100.dp))
                             .rotate(140f)
                     )
                 }
@@ -74,7 +94,7 @@ fun SpinningWheelScreen() {
                     onClick = {
 
                         showCelebration= false
-                        amounts = List(8) { Random.nextInt(1, 100).toString() }
+
 
                         coroutineScope.launch {
 
@@ -97,10 +117,10 @@ fun SpinningWheelScreen() {
 }
 
 @Composable
-fun SpinningWheel(rotation: Float, amounts: List<String>) {
+fun SpinningWheel(rotation: Float, amounts: Array<String>) {
     val numberOfSections = amounts.size
     val colors = listOf(
-        Color.Red, Color.Blue, Color.Green, Color.Yellow, Color.Cyan, Color.Magenta, Color.Gray, Color.Black
+        Color.Red, Color.Blue, Color.Green, Color.Yellow, Color.Cyan
     )
     val sectionAngle = 360f / numberOfSections
 
@@ -108,18 +128,15 @@ fun SpinningWheel(rotation: Float, amounts: List<String>) {
         .size(300.dp)
         .clip(CircleShape)) {
 
-        for (i in 0 until numberOfSections) {
+        for (i in amounts.indices) {
             rotate(degrees = rotation + i * sectionAngle) {
                 drawIntoCanvas {
-
                     drawRoundRect(
                         color = colors[i % colors.size],
                         topLeft = Offset(size.width / 2, 0f),
                         size = Size(size.width / 2, size.height / 2),
                         cornerRadius = CornerRadius.Zero
                     )
-
-
                     drawContext.canvas.nativeCanvas.apply {
                         val text = amounts[i]
                         drawText(
@@ -144,6 +161,31 @@ fun SpinningWheel(rotation: Float, amounts: List<String>) {
         )
     }
 }
+
+// Coroutine to spin the wheel and land on a specific index
+suspend fun spinWheel(wheelState: Animatable<Float, AnimationVector1D>, amounts: Array<String>, targetIndex: Int): String {
+    val numberOfSections = amounts.size
+    val sectionAngle = 360f / numberOfSections
+
+    // Calculate the target rotation based on the index
+    val targetRotation = (numberOfSections - targetIndex) * sectionAngle
+    val randomSpin = Random.nextInt(5, 10) * 360f
+
+    wheelState.animateTo(
+        targetValue = randomSpin + targetRotation,
+        animationSpec = tween(
+            durationMillis = 3000,
+            easing = FastOutSlowInEasing
+        )
+    )
+
+    delay(100)
+
+    // Return the amount at the target index
+    return amounts[targetIndex]
+}
+
+
 
 
 suspend fun spinWheel(

@@ -1,3 +1,10 @@
 <resources>
-    <string name="app_name">FoodApp</string>
+    <string name="app_name">Foodie</string>
+    <string name="cuisines">Cuisines</string>
+    <string name="categories">Categories</string>
 </resources>
+
+
+
+
+

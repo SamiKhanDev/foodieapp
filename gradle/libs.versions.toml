@@ -12,6 +12,7 @@ compose-navigation = "2.7.7"
 navigationRuntimeKtx = "2.8.1"
 accompanist-pager= "0.28.0"
 accompanist-pager-indicators="0.28.0"
+appcompat = "1.7.0"
 
 
 [libraries]
@@ -33,6 +34,7 @@ androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navig
 compose-navigation = {module = "androidx.navigation:navigation-compose" , version.ref = "compose-navigation"}
 accompanist-pager={module = "com.google.accompanist:accompanist-pager" , version.ref = "accompanist-pager"}
 accompanist-pager-indicators={module = "com.google.accompanist:accompanist-pager" , version.ref = "accompanist-pager-indicators"}
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 
 
 

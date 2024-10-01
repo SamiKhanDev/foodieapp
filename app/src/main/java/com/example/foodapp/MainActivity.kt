@@ -50,12 +50,11 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalFoundationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        LocaleHelper.onAttach(this)
-
+        enableEdgeToEdge()
         setContent {
             FoodAppTheme {
-                StaggeredGridScreenContent()
-                //FoodAppNavHost()
+                //StaggeredGridScreenContent()
+                FoodAppNavHost()
 
 
             }

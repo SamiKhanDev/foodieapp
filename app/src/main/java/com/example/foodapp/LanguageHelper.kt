@@ -1,48 +1,49 @@
+import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
+import android.content.res.Resources
 import android.os.Build
-import android.preference.PreferenceManager
-import java.util.*
+import android.os.LocaleList
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
+import java.util.Locale
 
-class LocaleHelper {
+class LanguageChangeHelper {
 
-    companion object {
-        private const val SELECTED_LANGUAGE = "Locale.Helper.Selected.Language"
+    fun changeLanguage(context: Context, languageCode: String) {
+        val locale = Locale(languageCode)
+        Locale.setDefault(locale)
 
-        fun onAttach(context: Context): Context {
-            val lang = getPersistedData(context, Locale.getDefault().language)
-            return setLocale(context, lang)
-        }
+        val resources: Resources = context.resources
+        val config: Configuration = resources.configuration
 
-        fun setLocale(context: Context, language: String): Context {
-            persist(context, language)
-            return updateResources(context, language)
-        }
-
-        fun getPersistedData(context: Context, defaultLanguage: String): String {
-            val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-            return preferences.getString(SELECTED_LANGUAGE, defaultLanguage) ?: defaultLanguage
-        }
-
-        private fun persist(context: Context, language: String) {
-            val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-            preferences.edit().putString(SELECTED_LANGUAGE, language).apply()
-        }
-
-        private fun updateResources(context: Context, language: String): Context {
-            val locale = Locale(language)
-            Locale.setDefault(locale)
-
-            val res = context.resources
-            val config = Configuration(res.configuration)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            context.getSystemService(android.app.LocaleManager::class.java).applicationLocales =
+                LocaleList.forLanguageTags(languageCode)
+        } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 config.setLocale(locale)
-                return context.createConfigurationContext(config)
+                config.setLocales(LocaleList(locale))
             } else {
                 config.locale = locale
-                res.updateConfiguration(config, res.displayMetrics)
-                return context
             }
+
+            resources.updateConfiguration(config, resources.displayMetrics)
+
+            if (context is Activity) {
+                context.recreate()
+            }
+        }
+
+        AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(languageCode))
+    }
+
+    fun getLanguageCode(context: Context): String {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            context.getSystemService(android.app.LocaleManager::class.java).applicationLocales[0]
+                ?.toLanguageTag()?.split("-")?.first() ?: "en"
+        } else {
+            AppCompatDelegate.getApplicationLocales()[0]?.toLanguageTag()?.split("-")?.first() ?: "en"
         }
     }
 }

@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
@@ -58,19 +57,19 @@ fun StaggeredGridScreenContent() {
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         modifier = Modifier.fillMaxSize()
     ) {
-        items(randomSizedPhotos) {Item ->
-            val isSpecialImage = Item.name == "Chinese" || Item.name == "Indian"
+        items(randomSizedPhotos) {Items ->
+            val isSpecialImage = Items.name == "Chinese" || Items.name == "Indian"
             Image(
-                painter = painterResource(id = Item.imageRes),
-                contentDescription = Item.name,
+                painter = painterResource(id = Items.imageRes),
+                contentDescription = Items.name,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .apply {
+                    .let {
                         if (isSpecialImage) {
-                            height(16.dp) // Specify height for special images
+                            it.height(250.dp) // Larger height for special images
                         } else {
-                            wrapContentHeight() // Regular images
+                            it.height(150.dp) // Standard height for regular images
                         }
                     }
             )

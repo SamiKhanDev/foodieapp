@@ -1,5 +1,6 @@
 package com.example.foodapp
 
+import LanguageChangeHelper
 import android.app.Activity
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -41,26 +43,28 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import java.util.Locale
 
 @Composable
 fun HomeScreen (navController: NavHostController){
-
-
-
     val context = LocalContext.current
+
+    val languageChangeHelper by lazy {
+        LanguageChangeHelper()
+    }
+
     val allLanguages = listOf(
         Language("en", "English", R.drawable.english),
-        Language("ar", "arabic", R.drawable.arabic),
-        Language("fr", "French", R.drawable.france)
+        Language("ar", "Arabic", R.drawable.arabic),
+        Language("fr", "French", R.drawable.france),
     )
 
-    var currentLanguage by remember { mutableStateOf(LocaleHelper.getPersistedData(context, Locale.getDefault().language)) }
+    val currentLanguageCode: String = languageChangeHelper.getLanguageCode(context)
+
+    var currentLanguage by remember { mutableStateOf(currentLanguageCode) }
 
     val onCurrentLanguageChange: (String) -> Unit = { newLanguage ->
         currentLanguage = newLanguage
-        LocaleHelper.setLocale(context, newLanguage)
-        (context as Activity).recreate()  // Recreate the activity to apply language change
+        languageChangeHelper.changeLanguage(context, newLanguage)
     }
 
     LazyColumn(
@@ -73,7 +77,7 @@ fun HomeScreen (navController: NavHostController){
             LanguagesDropdown(
                 modifier = Modifier
                     .background(MaterialTheme.colorScheme.background)
-                    .padding(top = 8.dp),
+                    .padding(top = 20.dp),
                 languagesList = allLanguages,
                 currentLanguage = currentLanguage,
                 onCurrentLanguageChange = onCurrentLanguageChange
@@ -242,7 +246,7 @@ fun LanguagesDropdown(
                     onClick = {
                         selectedItem = item
                         expanded = !expanded
-                        onCurrentLanguageChange(item.code)  // Call language change function
+                        onCurrentLanguageChange(item.code)
                     }
                 )
             }

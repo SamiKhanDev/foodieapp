@@ -309,12 +309,3 @@ fun CategoryCard(category: CategoryItem, onCategoryClick: (CategoryItem) -> Unit
 
     }
 }
-
-
-
-
-
-
-
-
-

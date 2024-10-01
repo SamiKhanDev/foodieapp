@@ -1,6 +1,9 @@
 plugins {
+
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-kapt")
+    alias(libs.plugins.dagger.hilt)
 }
 
 android {
@@ -48,6 +51,10 @@ android {
         }
     }
 }
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
+}
 
 dependencies {
 
@@ -57,15 +64,30 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
+    implementation(libs.dagger.hilt.andriod)
+    implementation(libs.androidx.appcompat)
+    kapt(libs.dagger.hilt.compiler)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.compose.navigation)
-    implementation(libs.accompanist.pager)
-    implementation(libs.accompanist.pager.indicators)
-
     implementation(libs.androidx.material3)
-    implementation(libs.androidx.navigation.runtime.ktx)
-    implementation(libs.androidx.appcompat)
+    implementation(libs.retrofit){
+        exclude(module = "okhttp")
+    }
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.retrofit.okhttp)
+    implementation(libs.dagger.hilt.compose)
+    implementation(libs.retrofit.urlconnection)
+    implementation(libs.retrofit.logging)
+    implementation(libs.coil)
+    implementation(libs.gson)
+    implementation(libs.compose.navigation)
+    implementation(libs.compose.constraint)
+    implementation(libs.room.runtime)
+    annotationProcessor(libs.room.compiler)
+    kapt(libs.room.kapt)
+    implementation(libs.room.ktx)
+
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

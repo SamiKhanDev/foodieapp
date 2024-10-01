@@ -1,5 +1,6 @@
 package com.example.foodapp
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -38,7 +39,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun CategoryDetailScreen(categoryName: String, navController: NavHostController) {
     val pagerState = rememberPagerState(initialPage = 0) { 3 }
@@ -122,7 +123,7 @@ fun BottomSheetContent(navController: NavHostController) {
             }
         }
     }
-    }
+}
 
 
 @Composable

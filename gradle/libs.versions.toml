@@ -18,6 +18,7 @@ compose-navigation = "2.7.7"
 compose-constraint = "1.0.1"
 room-version = "2.6.1"
 appcompat = "1.7.0"
+generativeai = "0.9.0"
 
 
 [libraries]
@@ -53,6 +54,7 @@ room-compiler = {module = "androidx.room:room-compiler", version.ref = "room-ver
 room-kapt = {module = "androidx.room:room-compiler", version.ref = "room-version"}
 room-ktx = {module = "androidx.room:room-ktx", version.ref = "room-version"}
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+generativeai = { group = "com.google.ai.client.generativeai", name = "generativeai", version.ref = "generativeai" }
 
 
 [plugins]

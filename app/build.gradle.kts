@@ -66,6 +66,7 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.dagger.hilt.andriod)
     implementation(libs.androidx.appcompat)
+    implementation(libs.generativeai)
     kapt(libs.dagger.hilt.compiler)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
